@@ -21,6 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 import com.google.api.gax.rpc.ServerStream;
 import com.google.cloud.spanner.BatchClient;
@@ -294,7 +295,9 @@ public abstract class SpannerDataWriterTestBase {
             .addIndexes(0)
             .setStatus(Status.newBuilder().setCode(Code.DEADLINE_EXCEEDED_VALUE).build())
             .build();
-    ServerStream<BatchWriteResponse> mockStream = mock(ServerStream.class);
+    // Avoid copying @NullMarked on JDK 8 (JDK-7183985 in AnnotationParser.parseEnumArray).
+    ServerStream<BatchWriteResponse> mockStream =
+        mock(ServerStream.class, withSettings().withoutAnnotations());
     when(mockStream.iterator()).thenReturn(Collections.singletonList(transientError).iterator());
     return mockStream;
   }
@@ -305,7 +308,8 @@ public abstract class SpannerDataWriterTestBase {
             .addIndexes(0)
             .setStatus(Status.newBuilder().setCode(Code.OK_VALUE).build())
             .build();
-    ServerStream<BatchWriteResponse> mockStream = mock(ServerStream.class);
+    ServerStream<BatchWriteResponse> mockStream =
+        mock(ServerStream.class, withSettings().withoutAnnotations());
     when(mockStream.iterator()).thenReturn(Collections.singletonList(result).iterator());
     return mockStream;
   }
@@ -410,7 +414,8 @@ public abstract class SpannerDataWriterTestBase {
         BatchWriteResponse.newBuilder().setStatus(errorStatus).clearIndexes();
 
     // Create a Mock object for ServerStream
-    ServerStream<BatchWriteResponse> mockStream = mock(ServerStream.class);
+    ServerStream<BatchWriteResponse> mockStream =
+        mock(ServerStream.class, withSettings().withoutAnnotations());
 
     // Configure the mock to return an iterator over our list
     when(mockStream.iterator())

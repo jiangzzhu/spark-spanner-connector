@@ -2,6 +2,9 @@
 
 ## Next
 
+*   Upgrade `com.google.cloud:libraries-bom` to 26.92.0, gRPC to 1.85.1 (bundling Netty 4.2.17.Final), Guava to 33.7.2-jre, Jackson to 2.22.4, and OpenTelemetry to 1.67.0 to address third-party CVEs.
+*   Relocate `io.opentelemetry`, `dev.cel`, `org.bouncycastle`, and `org.jspecify` packages in the shaded connector JARs and exclude multi-release `META-INF/versions/**` entries during shading.
+
 ## 1.5.0 - 2026-09-02
 
 *   Add a `query` option for reading partitionable SQL query results as Spark DataFrames.
